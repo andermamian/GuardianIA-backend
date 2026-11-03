@@ -1,0 +1,24 @@
+# Plano de Render: «New → Blueprint» y elige este repositorio. Los secretos los escribes tú en el panel.
+services:
+  - type: web
+    name: guardianai
+    runtime: docker
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: GUARDIAN_ENV
+        value: production
+      - key: GUARDIAN_ACTIVE_KEY_VERSION
+        value: v1
+      - key: GUARDIAN_JWT_SECRET
+        generateValue: true          # Render crea uno largo y aleatorio
+      - key: GUARDIAN_KEYRING
+        sync: false                  # pégalo desde: python -m app.cli generate-keys
+      - key: GUARDIAN_DATABASE_URL
+        sync: false                  # la cadena de conexión de Neon (PostgreSQL)
+      - key: GUARDIAN_CORS_ORIGINS
+        sync: false                  # https://TU-SERVICIO.onrender.com
+      - key: GUARDIAN_ANTHROPIC_API_KEY
+        sync: false
+      - key: GUARDIAN_ANTHROPIC_MODEL
+        value: claude-haiku-5-5

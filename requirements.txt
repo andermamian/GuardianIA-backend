@@ -1,0 +1,36 @@
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+SQLAlchemy==2.0.54
+pydantic==2.13.5
+pydantic-settings==2.15.0
+email-validator==2.3.0
+PyJWT==2.14.0
+argon2-cffi==25.1.0
+cryptography==50.0.1
+PyOTP==2.10.0
+httpx==0.28.1
+socksio==1.0.0   # proxy SOCKS de httpx: modo cebolla (Tor)
+python-multipart==0.0.32
+# Estudio de creación: documentos, hojas de cálculo, presentaciones, PDF, gráficos, QR y música
+python-docx==1.1.2
+openpyxl==3.1.5
+python-pptx==1.0.2
+reportlab==4.2.5
+matplotlib>=3.10.0
+qrcode[pil]==8.0
+MIDIUtil==1.2.1
+# Lectura de archivos adjuntos en el asistente
+pypdf==5.1.0
+pytesseract==0.3.13  # OCR de imágenes; requiere Tesseract instalado (https://github.com/UB-Mannheim/tesseract/wiki)
+Pillow>=10.4
+# El video necesita ffmpeg instalado en el sistema (https://ffmpeg.org). Si falta, la app lo avisa
+# y ofrece una presentación (pptx) en su lugar.
+
+# Base de datos de zonas horarias IANA: Windows no la trae y sin ella zoneinfo falla
+tzdata>=2024.1; platform_system == "Windows"
+# PostgreSQL en producción:
+psycopg[binary]==3.2.3
+
+# Protección de este equipo (opcionales pero recomendadas: sin ellas funciona con sondeo y ctypes)
+watchdog>=6.0      # tiempo real instantáneo: Windows avisa en cuanto aparece un archivo
+psutil>=7.0        # procesos y CPU más precisos

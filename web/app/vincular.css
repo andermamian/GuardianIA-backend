@@ -1,0 +1,49 @@
+/* Estilos de /vincular. Van en archivo aparte porque la CSP (style-src 'self') bloquea los <style> en línea. */
+* { box-sizing: border-box; }
+body { margin: 0; min-height: 100vh; background: #0b1d2e; color: #eaf2fb;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; padding: 1.2rem 1rem; }
+.wrap { max-width: 440px; margin: 0 auto; }
+.marca { display: flex; align-items: center; gap: .5rem; font-weight: 700; font-size: 1.1rem; margin-bottom: .9rem; }
+.marca span { color: #38bdf8; font-size: 1.4rem; }
+.tarjeta { background: #12263b; border: 1px solid #23415c; border-radius: 18px; padding: 1.3rem; }
+h1 { font-size: 1.3rem; margin: 0 0 .5rem; }
+p { color: #9fbad2; line-height: 1.5; margin: .4rem 0; }
+label { display: block; font-size: .82rem; color: #9fbad2; margin: .9rem 0 .3rem; }
+input { width: 100%; padding: .85rem 1rem; font-size: 1.05rem; border-radius: 12px; border: 1px solid #23415c;
+  background: #0d1f31; color: #eaf2fb; }
+.codigo { letter-spacing: .4rem; text-align: center; font-size: 1.6rem; font-weight: 700; }
+button { width: 100%; margin-top: 1.1rem; padding: 1rem; font-size: 1.05rem; font-weight: 600; border: none;
+  border-radius: 12px; background: #38bdf8; color: #04121e; cursor: pointer; }
+button:active { opacity: .8; }
+button:disabled { opacity: .55; }
+button.sec { background: transparent; color: #eaf2fb; border: 1px solid #23415c; margin-top: .55rem; }
+.aviso { padding: .8rem 1rem; border-radius: 12px; margin-top: 1rem; font-size: .9rem; }
+.info { background: rgba(56,189,248,.12); border: 1px solid #1e5878; }
+.ok { background: rgba(52,211,153,.12); border: 1px solid #1f6b52; color: #b6f0da; }
+.err { background: rgba(248,113,113,.12); border: 1px solid #7a2f2f; color: #fbc4c4; }
+.fila { display: flex; justify-content: space-between; padding: .5rem 0; border-bottom: 1px solid #23415c; font-size: .92rem; }
+.fila span:last-child { color: #eaf2fb; }
+.muted { color: #9fbad2; font-size: .82rem; }
+a { color: #38bdf8; }
+.oculto { display: none !important; }
+#estado-js { font-size: .75rem; color: #64748b; text-align: center; margin-top: .8rem; }
+
+/* Estado del GPS con color según el caso */
+.gps { font-size: .9rem; line-height: 1.45; margin: .6rem 0; color: #9fbad2; }
+.gps[data-estado="ok"] { color: #6ee7b7; }
+.gps[data-estado="https_required"], .gps[data-estado="denied"], .gps[data-estado="unavailable"] { color: #fca5a5; }
+.gps[data-estado="paused"] { color: #fcd34d; }
+
+/* Capa de acciones remotas: mensaje, bloqueo y alarma */
+.capa { position: fixed; inset: 0; z-index: 50; background: rgba(4, 12, 22, .96); display: flex;
+  align-items: center; justify-content: center; padding: 1.5rem; }
+.capa-caja { max-width: 420px; text-align: center; }
+.capa-icono { font-size: 3rem; }
+.capa h2 { font-size: 1.6rem; margin: .6rem 0; }
+.capa p { font-size: 1.15rem; color: #eaf2fb; white-space: pre-wrap; }
+.capa.alarma { animation: parpadeo .5s steps(2) infinite; }
+@keyframes parpadeo { 0% { background: #b91c1c; } 50% { background: #04121e; } }
+@media (prefers-reduced-motion: reduce) { .capa.alarma { animation: none; background: #b91c1c; } }
+
+.canal { font-size: .8rem; margin: .2rem 0 .4rem; color: #fcd34d; }
+.canal[data-estado="ok"] { color: #6ee7b7; }

@@ -1,0 +1,338 @@
+[
+ {
+  "nombre": "sin servidor configurado: Tor",
+  "senales": {
+   "servidor_configurado": false,
+   "tor_disponible": true
+  },
+  "objetivo": "equilibrio",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "tor",
+  "puntajes": {
+   "tor": 0.52
+  }
+ },
+ {
+  "nombre": "servidor sano, equilibrio: servidor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "equilibrio",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "servidor",
+  "puntajes": {
+   "servidor": 0.78,
+   "tor": 0.52,
+   "servidor_tor": 0.7
+  }
+ },
+ {
+  "nombre": "servidor sano, anonimato: servidor+Tor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "anonimato",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "servidor_tor",
+  "puntajes": {
+   "servidor": 0.42,
+   "tor": 0.8,
+   "servidor_tor": 0.95
+  }
+ },
+ {
+  "nombre": "servidor sano, velocidad: servidor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "velocidad",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "servidor",
+  "puntajes": {
+   "servidor": 0.92,
+   "tor": 0.3,
+   "servidor_tor": 0.35
+  }
+ },
+ {
+  "nombre": "servidor caído, anonimato: Tor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": false,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "anonimato",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "tor",
+  "puntajes": {
+   "tor": 0.8
+  }
+ },
+ {
+  "nombre": "cupo al 90 %: ahorra servidor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.9,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "equilibrio",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "tor",
+  "puntajes": {
+   "servidor": 0.48,
+   "tor": 0.52,
+   "servidor_tor": 0.4
+  }
+ },
+ {
+  "nombre": "cupo al 98 %: servidor descartado",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.98,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "velocidad",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "tor",
+  "puntajes": {
+   "tor": 0.3
+  }
+ },
+ {
+  "nombre": "WiFi pública, anonimato: servidor+Tor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": true
+  },
+  "objetivo": "anonimato",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "servidor_tor",
+  "puntajes": {
+   "servidor": 0.52,
+   "tor": 0.72,
+   "servidor_tor": 1.05
+  }
+ },
+ {
+  "nombre": "WiFi pública sin Tor: servidor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": false,
+   "red_insegura": true
+  },
+  "objetivo": "equilibrio",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "servidor",
+  "puntajes": {
+   "servidor": 0.88
+  }
+ },
+ {
+  "nombre": "nada disponible",
+  "senales": {
+   "servidor_configurado": false,
+   "tor_disponible": false
+  },
+  "objetivo": "equilibrio",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": null,
+  "puntajes": {}
+ },
+ {
+  "nombre": "servidor poco fiable aquí: servidor+Tor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "equilibrio",
+  "memoria": {
+   "servidor": {
+    "intentos": 5,
+    "fiabilidad": 0.2,
+    "segundos": null,
+    "ultimo_fallo": 0.0
+   },
+   "tor": {
+    "intentos": 0,
+    "fiabilidad": 0.8,
+    "segundos": null,
+    "ultimo_fallo": 0.0
+   },
+   "servidor_tor": {
+    "intentos": 0,
+    "fiabilidad": 0.8,
+    "segundos": null,
+    "ultimo_fallo": 0.0
+   }
+  },
+  "ahora": 1000000.0,
+  "esperado": "servidor_tor",
+  "puntajes": {
+   "servidor": 0.63,
+   "tor": 0.52,
+   "servidor_tor": 0.7
+  }
+ },
+ {
+  "nombre": "servidor falló hace 1 min: Tor mientras tanto",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 80,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "equilibrio",
+  "memoria": {
+   "servidor": {
+    "intentos": 1,
+    "fiabilidad": 0.8,
+    "segundos": null,
+    "ultimo_fallo": 999940.0
+   },
+   "tor": {
+    "intentos": 0,
+    "fiabilidad": 0.8,
+    "segundos": null,
+    "ultimo_fallo": 0.0
+   },
+   "servidor_tor": {
+    "intentos": 0,
+    "fiabilidad": 0.8,
+    "segundos": null,
+    "ultimo_fallo": 0.0
+   }
+  },
+  "ahora": 1000000.0,
+  "esperado": "tor",
+  "puntajes": {
+   "servidor": 0.48,
+   "tor": 0.52,
+   "servidor_tor": 0.4
+  }
+ },
+ {
+  "nombre": "servidor lento (400 ms), equilibrio: aún servidor",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "latencia_servidor_ms": 400,
+   "consumo_fraccion": 0.1,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "equilibrio",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "servidor",
+  "puntajes": {
+   "servidor": 0.66,
+   "tor": 0.52,
+   "servidor_tor": 0.64
+  }
+ },
+ {
+  "nombre": "no se pudo consultar el servidor: se intenta igual",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": null,
+   "latencia_servidor_ms": null,
+   "consumo_fraccion": null,
+   "tor_disponible": true,
+   "red_insegura": false
+  },
+  "objetivo": "equilibrio",
+  "memoria": null,
+  "ahora": 1000000.0,
+  "esperado": "servidor",
+  "puntajes": {
+   "servidor": 0.73,
+   "tor": 0.52,
+   "servidor_tor": 0.65
+  }
+ },
+ {
+  "nombre": "el servidor acaba de fallar y se excluye: Tor (servidor+Tor también depende de él)",
+  "senales": {
+   "servidor_configurado": true,
+   "servidor_en_linea": true,
+   "tor_disponible": true
+  },
+  "objetivo": "equilibrio",
+  "memoria": {
+   "servidor": {
+    "intentos": 1,
+    "fiabilidad": 0.56,
+    "segundos": null,
+    "ultimo_fallo": 999995.0
+   },
+   "tor": {
+    "intentos": 0,
+    "fiabilidad": 0.8,
+    "segundos": null,
+    "ultimo_fallo": 0.0
+   },
+   "servidor_tor": {
+    "intentos": 0,
+    "fiabilidad": 0.8,
+    "segundos": null,
+    "ultimo_fallo": 0.0
+   }
+  },
+  "ahora": 1000000.0,
+  "excluir": [
+   "servidor"
+  ],
+  "esperado": "tor",
+  "puntajes": {
+   "tor": 0.52,
+   "servidor_tor": 0.4
+  }
+ }
+]

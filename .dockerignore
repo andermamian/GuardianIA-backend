@@ -1,0 +1,10 @@
+.env
+*.db
+data/
+__pycache__/
+.git/
+tests/
+agente/
+vpn_servidor/
+*.bat
+certificado_local.py

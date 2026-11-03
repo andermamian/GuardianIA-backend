@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es-CO">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="referrer" content="no-referrer">
+  <title>Vincular teléfono · GuardianIA</title>
+  <!-- Nada de estilos, scripts ni manejadores de clic en línea: la CSP del servidor
+       (script-src 'self') los bloquea en silencio. Todo va en archivos propios en /static. -->
+  <link rel="stylesheet" href="/static/app/vincular.css">
+</head>
+<body>
+  <div class="wrap">
+    <div class="marca"><span>&#128737;</span> GuardianIA</div>
+
+    <div class="tarjeta" id="paso-vincular">
+      <h1>Vincular este teléfono</h1>
+      <p>Quedará conectado a tu cuenta para poder ubicarlo si se pierde.</p>
+      <label for="codigo">Código de 6 dígitos</label>
+      <input id="codigo" class="codigo" inputmode="numeric" maxlength="6" placeholder="000000">
+      <label for="nombre">Nombre para este teléfono</label>
+      <input id="nombre" maxlength="40" placeholder="Mi teléfono">
+      <div class="aviso info">Al continuar se te pedirá permiso de ubicación, que es lo que permite encontrar el teléfono desde tu PC.</div>
+      <button type="button" data-accion="vincular">Vincular y activar ubicación</button>
+      <button type="button" class="sec" data-accion="limpiar">Borrar datos de este teléfono en el navegador</button>
+      <div id="msg-vincular"></div>
+    </div>
+
+    <div class="tarjeta oculto" id="paso-activo">
+      <h1>Teléfono vinculado</h1>
+      <p id="nombre-activo"></p>
+      <p id="canal" class="canal">○ Conectando con tu PC…</p>
+      <div id="aviso-reportado" class="aviso err oculto">Este teléfono está reportado como perdido o robado. Si lo encontraste, sigue las instrucciones en pantalla.</div>
+      <p id="estado-gps" class="gps"></p>
+      <div id="datos"></div>
+      <div class="aviso info">Deja esta pestaña abierta para que el teléfono siga reportando. Si la cierras o el teléfono se apaga, tu PC mostrará «Desconectado».</div>
+      <button type="button" class="sec" data-accion="reportar">Enviar mi ubicación ahora</button>
+      <button type="button" class="sec" id="btn-wake" data-accion="wake">Mantener pantalla encendida</button>
+      <button type="button" class="sec" data-accion="desvincular">Desvincular</button>
+      <div id="msg-activo"></div>
+    </div>
+
+    <div id="capa" class="capa oculto" role="alertdialog" aria-live="assertive">
+      <div class="capa-caja">
+        <div class="capa-icono">&#128737;</div>
+        <h2 id="capa-titulo"></h2>
+        <p id="capa-texto"></p>
+        <button type="button" id="capa-cerrar" data-accion="cerrarCapa">Detener / Entendido</button>
+      </div>
+    </div>
+
+    <!-- Si este texto no cambia, el script no cargó (revisa que el servidor esté actualizado). -->
+    <div id="estado-js">Cargando… si este mensaje no cambia, el script de la página no se pudo cargar.</div>
+  </div>
+
+  <script src="/static/app/vincular.js"></script>
+</body>
+</html>

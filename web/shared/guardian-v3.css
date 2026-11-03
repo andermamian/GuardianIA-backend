@@ -1,0 +1,49 @@
+/* GuardianIA v3: animaciones, chat, Tor y privacidad. Archivo aparte para no pisar base.css.
+   Cortas (≤ 300 ms) y con propósito; quien activó «reducir movimiento» en su sistema no las ve. */
+:root { --ease-salida: cubic-bezier(0.16, 1, 0.3, 1); }
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+/* Cambio de sección: la vista nueva entra con un leve ascenso. */
+.main > * { animation: vista-entra 0.32s var(--ease-salida) both; }
+@keyframes vista-entra { from { opacity: 0; transform: translateY(10px); } }
+
+/* Paneles y tarjetas: elevación al pasar el mouse (solo con puntero). */
+@media (hover: hover) {
+  a.panel, .panel.stat { transition: transform 0.2s var(--ease-salida), box-shadow 0.2s, border-color 0.2s; }
+  a.panel:hover, .panel.stat:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28); }
+}
+
+/* Botones: respuesta táctil al presionar. */
+.btn { transition: transform 0.12s ease, background-color 0.2s, box-shadow 0.2s, border-color 0.2s; }
+.btn:active:not(:disabled) { transform: scale(0.97); }
+
+/* Chat: cada mensaje entra deslizándose; tres puntos mientras la IA piensa. */
+.msg-entra { animation: msg-entra 0.28s var(--ease-salida) both; }
+.msg-user.msg-entra { animation-name: msg-entra-der; }
+@keyframes msg-entra { from { opacity: 0; transform: translate(-8px, 6px); } }
+@keyframes msg-entra-der { from { opacity: 0; transform: translate(8px, 6px); } }
+.escribiendo { display: inline-flex; gap: 4px; padding: 0.25rem 0; }
+.escribiendo i { width: 7px; height: 7px; border-radius: 50%; background: currentColor; opacity: 0.35;
+  animation: punto 1.2s infinite ease-in-out; }
+.escribiendo i:nth-child(2) { animation-delay: 0.15s; }
+.escribiendo i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes punto { 0%, 80%, 100% { opacity: 0.25; transform: translateY(0); } 40% { opacity: 1; transform: translateY(-4px); } }
+
+/* Listas: los elementos aparecen escalonados. */
+.list > li { animation: vista-entra 0.3s var(--ease-salida) both; }
+.list > li:nth-child(2) { animation-delay: 0.03s; } .list > li:nth-child(3) { animation-delay: 0.06s; }
+.list > li:nth-child(4) { animation-delay: 0.09s; } .list > li:nth-child(n+5) { animation-delay: 0.12s; }
+
+/* Barras de avance (arranque de Tor, consumo del servidor VPN). */
+.progreso-tor { height: 8px; border-radius: 99px; background: var(--mist, #e8eef4); overflow: hidden; }
+.progreso-tor > span { display: block; height: 100%; border-radius: inherit;
+  background: linear-gradient(90deg, #7d4698, #b27ccf); transition: width 0.6s var(--ease-salida); }
+
+/* Privacidad con un botón: orbe de estado que «respira» cuando protege. */
+.privacidad-orbe { width: 18px; height: 18px; border-radius: 50%; background: var(--line, #d0d7de); flex: none; }
+.privacidad[data-tono="ok"] .privacidad-orbe { background: #00c853; animation: orbe 2.2s infinite; }
+.privacidad[data-tono="warn"] .privacidad-orbe { background: #ffb300; animation: orbe-aviso 1s infinite; }
+@keyframes orbe { 0% { box-shadow: 0 0 0 0 rgba(0, 200, 83, 0.55); } 70%, 100% { box-shadow: 0 0 0 12px rgba(0, 200, 83, 0); } }
+@keyframes orbe-aviso { 50% { opacity: 0.35; } }
