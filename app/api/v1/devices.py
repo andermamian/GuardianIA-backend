@@ -50,12 +50,21 @@ MAX_DEVICES = 10
 COMMAND_TTL = {"ring": 10, "locate": 10, "message": 60, "photo": 60, "lock": 24 * 60, "sos": 10,
                "wipe": 7 * 24 * 60}  # minutos
 MAX_FOTO_BYTES = 1_500_000      # una foto de cámara frontal reducida pesa ~150-400 kB
-MAX_FOTOS_POR_EQUIPO = 30       # las más viejas se borran: evidencia reciente, sin acumular sin fin
-LOCATION_RETENTION_DAYS = 30
+DEVICE_HISTORY_RETENTION_DAYS = 365
+LOCATION_RETENTION_DAYS = DEVICE_HISTORY_RETENTION_DAYS
 MAX_PLAUSIBLE_KMH = 900  # por encima, la posición es falsa (GPS spoofing) o un error del sensor
 
 
 # ------------------------------------------------------------------ utilidades
+def purge_expired_device_history(db, now=None) -> int:
+    """Elimina ubicaciones y fotos con más de 365 días de antigüedad."""
+    now = now or utcnow()
+    cutoff = now - timedelta(days=DEVICE_HISTORY_RETENTION_DAYS)
+    locations = db.execute(delete(DeviceLocation).where(DeviceLocation.recorded_at < cutoff)).rowcount or 0
+    photos = db.execute(delete(DevicePhoto).where(DevicePhoto.created_at < cutoff)).rowcount or 0
+    return locations + photos
+
+
 def _own_device(db, user_id: str, device_id: str) -> Device:
     d = db.get(Device, device_id)
     if d is None or d.user_id != user_id:
@@ -419,7 +428,8 @@ def command_history(device_id: str, p: CurrentUser, db: DB, limit: int = Query(2
 
 
 @router.get("/devices/{device_id}/locations")
-def location_history(device_id: str, p: CurrentUser, db: DB, hours: int = Query(24, ge=1, le=24 * 30)):
+def location_history(device_id: str, p: CurrentUser, db: DB,
+                     hours: int = Query(24, ge=1, le=24 * DEVICE_HISTORY_RETENTION_DAYS)):
     d = _own_device(db, p.user.id, device_id)
     since = utcnow() - timedelta(hours=hours)
     rows = db.execute(select(DeviceLocation).where(DeviceLocation.device_id == d.id,
@@ -680,10 +690,10 @@ def telemetry(body: TelemetryIn, db: DB):
                 notify(db, d.user_id, f"Nueva ubicación de {d.name}",
                        emergency_svc.map_link(body.lat, body.lon), kind="device.location", severity="medium",
                        data={"device_id": d.id, "lat": body.lat, "lon": body.lon})
-            # La limpieza por retención no hace falta en cada latido: basta al guardar un punto.
+            # Mantener la limpieza por equipo evita que un dispositivo muy activo acumule datos viejos.
             db.execute(delete(DeviceLocation).where(
                 DeviceLocation.device_id == d.id,
-                DeviceLocation.recorded_at < now - timedelta(days=LOCATION_RETENTION_DAYS)))
+                DeviceLocation.recorded_at < now - timedelta(days=DEVICE_HISTORY_RETENTION_DAYS)))
     # Un solo aviso al cruzar el 10 %, no uno por cada latido.
     if d.status in ("lost", "stolen") and body.battery is not None and body.battery <= 10 \
             and (bateria_antes is None or bateria_antes > 10):
@@ -794,7 +804,7 @@ def self_photo(body: SelfPhotoIn, db: DB):
 
     Solo se acepta con el equipo reportado (perdido o robado): una foto no pedida por el dueño se
     rechaza aunque venga con el token correcto. La imagen se guarda CIFRADA (AES-256-GCM con la
-    clave del servidor), se valida que sea un JPEG real y se conservan solo las últimas 30.
+    clave del servidor), se valida que sea un JPEG real y se conserva durante 365 días.
     """
     import base64
     import binascii
@@ -816,10 +826,9 @@ def self_photo(body: SelfPhotoIn, db: DB):
     db.flush()
     sellado = crypto.seal(datos, _ctx_foto(foto.id, d.id))
     foto.key_version, foto.wrapped_dek, foto.blob = sellado.key_version, sellado.wrapped_dek, sellado.ciphertext
-    viejas = db.execute(select(DevicePhoto).where(DevicePhoto.device_id == d.id)
-                        .order_by(DevicePhoto.created_at.desc()).offset(MAX_FOTOS_POR_EQUIPO)).scalars().all()
-    for v in viejas:
-        db.delete(v)
+    db.execute(delete(DevicePhoto).where(
+        DevicePhoto.device_id == d.id,
+        DevicePhoto.created_at < utcnow() - timedelta(days=DEVICE_HISTORY_RETENTION_DAYS)))
     notify(db, d.user_id, "Foto del teléfono reportado",
            f"«{d.name}» envió una foto de la cámara frontal. Entréguela a la Policía; no confronte a nadie.",
            kind="device.photo", severity="high", data={"device_id": d.id, "foto_id": foto.id})

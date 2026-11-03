@@ -352,9 +352,9 @@ async function historyDialog(ctx, d) {
   const body = h("div", { class: "stack" }, h("div", { class: "skeleton" }, h("span", {}), h("span", {})));
   dialog({ title: `Historial de ${d.name}`, body, wide: true, actions: [{ label: "Cerrar", kind: "primary" }] });
   try {
-    const [cmds, locs] = await Promise.all([ctx.api.get(`devices/${d.id}/commands`), ctx.api.get(`devices/${d.id}/locations`, { query: { hours: 72 } })]);
+    const [cmds, locs] = await Promise.all([ctx.api.get(`devices/${d.id}/commands`), ctx.api.get(`devices/${d.id}/locations`, { query: { hours: 24 * 365 } })]);
     mount(body,
-      h("h3", {}, "Ubicaciones (72 h)"),
+      h("h3", {}, "Ubicaciones (365 días)"),
       locs.puntos.length ? h("div", { class: "table-wrap" }, h("table", { class: "table" },
         h("thead", {}, h("tr", {}, h("th", {}, "Hora"), h("th", {}, "Precisión"), h("th", {}, ""))),
         h("tbody", {}, locs.puntos.slice(-30).reverse().map((p) => h("tr", {}, h("td", {}, fmt.date(p.t)),

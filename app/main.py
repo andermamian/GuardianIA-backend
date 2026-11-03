@@ -65,14 +65,18 @@ async def lifespan(app: FastAPI):
     arrancar_proteccion_local(s)
     stop = asyncio.Event()
     task = asyncio.create_task(_emergency_loop(stop))
+    retention_task = asyncio.create_task(_device_retention_loop(stop))
     try:
         yield
     finally:
         detener_proteccion_local()
         stop.set()
         task.cancel()
+        retention_task.cancel()
         with contextlib.suppress(asyncio.CancelledError):
             await task
+        with contextlib.suppress(asyncio.CancelledError):
+            await retention_task
 
 
 async def _emergency_loop(stop: asyncio.Event):
@@ -82,6 +86,27 @@ async def _emergency_loop(stop: asyncio.Event):
             await asyncio.to_thread(_process_due_once)
         with contextlib.suppress(asyncio.TimeoutError):
             await asyncio.wait_for(stop.wait(), timeout=5)
+
+
+async def _device_retention_loop(stop: asyncio.Event):
+    """Limpia cada hora ubicaciones y fotos que superaron 365 días."""
+    while not stop.is_set():
+        with contextlib.suppress(Exception):
+            await asyncio.to_thread(_purge_device_history_once)
+        with contextlib.suppress(asyncio.TimeoutError):
+            await asyncio.wait_for(stop.wait(), timeout=3600)
+
+
+def _purge_device_history_once():
+    from app.api.v1.devices import purge_expired_device_history
+    db = SessionLocal()
+    try:
+        deleted = purge_expired_device_history(db)
+        if deleted:
+            db.commit()
+            log.info("Limpieza de retención de dispositivos: %d registro(s) eliminado(s)", deleted)
+    finally:
+        db.close()
 
 
 def _process_due_once():
